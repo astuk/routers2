@@ -1,0 +1,54 @@
+--- /usr/bin/cfgmaker   2012-08-14 14:01:49.000000000 +0200
++++ cfgmaker    2013-08-15 10:58:46.367740610 +0200
+@@ -15,8 +15,8 @@
+ # base - basic program flow
+ # snpo - SNMP Polling
+ # snpd - SNMP Detail
+-#@main::DEBUG=qw(base);
+-@main::DEBUG=qw(base snpo snpd);
++#@main::DEBUG=qw(base snpo snpd);
++@main::DEBUG=qw();
+ 
+ require 5.005; 
+ use strict;
+@@ -1375,22 +1375,23 @@
+             # tenderly and populate the $$flags{}{} hashes accordingly.
+             for my $g (@{$$opt{"global"}}) {
+                 my ($t,$fs);
+-                $g =~ /^options\[([_^\$])\]:\s*(.*)$/i;
+-                $t = $1;
+-                $fs = $2;
+-                $t =~ s/_/default/;
+-                $t =~ s/\^/prepend/;
+-                $t =~ s/\$/append/;
+-
+-                # If a line like "options[X]:" is found clear
+-                # all flags for that category and then go to next
+-                # --global 'Options[..' line if any.
+-                if ($fs =~ /^\s*$/) {
+-                    $$flags{$t} = {};
+-                    next;
+-                } else {
+-                    for my $f (split /\s*,\s*/,$fs) {
+-                        $$flags{$t}{$f} = "set";
++                if ($g =~ /^options\[([_^\$])\]:\s*(.*)$/i) {
++                    $t = $1;
++                    $fs = $2;
++                    $t =~ s/_/default/;
++                    $t =~ s/\^/prepend/;
++                    $t =~ s/\$/append/;
++
++                    # If a line like "options[X]:" is found clear
++                    # all flags for that category and then go to next
++                    # --global 'Options[..' line if any.
++                    if ($fs =~ /^\s*$/) {
++                        $$flags{$t} = {};
++                        next;
++                    } else {
++                        for my $f (split /\s*,\s*/,$fs) {
++                            $$flags{$t}{$f} = "set";
++                        }
+                     }
+                 }
+             }
+

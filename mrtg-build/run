@@ -1,0 +1,10 @@
+## Clean Cron and Run MRTG Setup ##
+## Unhash with caution !!
+# rm /home/routers2/public_html/html/* -fr
+# rm /home/routers2/public_html/html/* -fr
+# rm /home/routers2/public_html/img/* -fr
+# rm /home/routers2/public_html/img/* -fr
+# rm /home/routers2/logs/* -fr
+# rm /home/routers2/logs/* -fr
+# rm /home/routers2/cfg/mrtg_* -fr
+/home/routers2/mrtg-build/clean && /home/routers2/mrtg-build/mrtg-conf && /home/routers2/mrtg-build/indexmkr_conf

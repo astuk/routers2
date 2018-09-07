@@ -1,0 +1,24 @@
+#cfgmaker --global 'WorkDir: /home/mrtg/httpd/cablersrouter' \
+#  automate
+   #!/bin/sh
+   for i in $(cat /home/routers2/mrtg-build/routers.txt); do
+    echo "Writing MRTG config files for $i"
+   	mkdir -p /home/routers2/public_html/html/$i
+        mkdir -p /home/routers2/public_html/img/$i
+	mkdir -p /home/routers2/lock/$i/.lockfile
+	mkdir /home/routers2/cfg
+	mkdir /home/routers2/logs
+	mycfgmaker --no-down --zero-speed=100000000 \
+		 --global "Options[_]: bits,growright" \
+		 --global "Imagedir: /home/routers2/public_html/img/$i" \
+   		 --global "HtmlDir: /home/routers2/public_html/html/$i" \
+		 --global "Interval: 10" \
+		 --global "Refresh: 300" \
+		 --global "Logdir: /home/routers2/logs" \
+		 --ifdesc=descr,name,ip \
+		 --output /home/routers2/cfg/mrtg_$i.cfg public@$i:::::2
+echo "Update crontab with cron.txt on completion..."
+echo "*/5 *   * * *   env LANG=C mrtg /home/routers2/cfg/mrtg_$i.cfg --lock-file /home/routers2/lock/$i/.lockfile/mrtg_l --confcache-file /home/routers2/cfg/mrtg.ok > /dev/null | tee -a /home/routers2/logs/mrtg.log" >> cron.txt
+
+    done
+

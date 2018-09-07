@@ -1,0 +1,18 @@
+### INDEXMAKER ####
+
+# indexmaker --title="Bandwidth Stats for C03-Core" --sort=descr --section=descr --sectionhost --output /home/mrtg/httpd/10.0.115.101/index.html cfg/mrtg_10.0.115.101.cfg
+# indexmaker --title="Bandwidth Stats for C03-Core" --sort=descr --section=descr --output /home/mrtg/httpd/10.0.115.101/index.html cfg/mrtg_10.0.115.101.cfg
+# Add all switch IPs to hosts file with names, use the names in the router.txt file and we should get the right name for the page title :-)
+
+# To Automate
+
+#!/bin/sh
+for i in $(cat routers.txt); do
+    echo "Writing switch index files for $i"
+    	indexmaker 	--title="Bandwidth Statistics for $i" \
+			--sort=descr \
+                	--section=descr \
+                	--prefix="../html/$i" \
+			--output /home/routers2/public_html/mrtg/$i.html /home/routers2/cfg/mrtg_$i.cfg
+done
+

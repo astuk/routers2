@@ -1,0 +1,2 @@
+## Clean Cron
+cat /dev/null > /home/routers2/mrtg-build/cron.txt
